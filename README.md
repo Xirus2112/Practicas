@@ -1,2 +1,2 @@
 # Practicas
- Registro de practiacas realizadas de manera organizativa
+ Registro de practicas guiadas organizadas segun sea el canal y quien lo imparte
