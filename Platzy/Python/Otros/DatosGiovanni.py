@@ -2,6 +2,8 @@ import os
 import pandas as pd
 import glob
 import shutil
+import tkinter as tk
+from tkinter import messagebox
 
 
 def move_and_clean_excel_file():
@@ -35,7 +37,7 @@ def move_and_clean_excel_file():
     df['NIC'] = df['NIC'].astype(str)
 
     # Paso 3: Reemplazar puntos por comas en todas las columnas
-    df = df.applymap(lambda x: x.replace('.', ','))
+    df = df.replace('.', ',')
 
     # Leer el archivo ProdActualizados_jul2023.csv
     csv_file_path = "//10.20.11.226/Compartida/BASEc/Giovannis/datosCruce/ProdActualizados_jul2023.csv"
@@ -45,7 +47,7 @@ def move_and_clean_excel_file():
     df_csv['CUENTA'] = df_csv['CUENTA'].astype(str)
 
     # Paso 5: Unir internamente las columnas 'NIC' y 'CUENTA' y crear Cruce.xlsx
-    df_cruce = pd.merge(df, df_csv, left_on='NIC', right_on='CUENTA', how='inner')
+    df_cruce = pd.merge(df_csv, df, left_on='CUENTA', right_on='NIC', how='inner')
 
     # Guardar el resultado en un nuevo archivo excel
     result_path = "//10.20.11.226/Compartida/BASEc/Giovannis/Cruce.xlsx"
@@ -73,3 +75,43 @@ def filter_and_save_data():
 
 if __name__ == "__main__":
     filter_and_save_data()
+
+def replace_dots_with_commas_in_excel(input_file, output_file):
+    # Leer el archivo excel
+    df = pd.read_excel(input_file)
+
+    # Aplicar la función lambda para reemplazar puntos por comas en cada celda del DataFrame
+    df = df.applymap(lambda x: str(x).replace('.', ','))
+
+    # Convertir columnas numéricas nuevamente a enteros
+    numeric_cols = df.select_dtypes(include=[int, float]).columns
+    df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric, errors='coerce')
+
+    # Guardar el DataFrame modificado en un nuevo archivo excel
+    df.to_excel(output_file, index=False)
+
+def show_information_window(file_path):
+    root = tk.Tk()
+    root.withdraw()  # Ocultar la ventana principal
+    messagebox.showinfo("Proceso finalizado", "El proceso ha finalizado. Haga clic en Aceptar para abrir el archivo generado.")
+    root.destroy()  # Cerrar la ventana secundaria
+
+    # Abrir el archivo generado con el programa predeterminado usando os.system()
+    os.system(f'start "" "{file_path}"')
+
+if __name__ == "__main__":
+    # Especificar la ruta del archivo de entrada "datosCruzados.xlsx"
+    input_file_path = "//10.20.11.226/Compartida/BASEc/Giovannis/datosCruzados.xlsx"  # Cambiar por la ruta del archivo a leer
+
+    # Especificar la ruta del archivo de salida "Datos_Giova.xlsx"
+    output_file_path = "//10.20.11.226/Compartida/BASEc/Giovannis/Datos_Giova.xlsx"  # Cambiar por la ruta donde deseas guardar el resultado
+
+    # Reemplazar los puntos por comas en el archivo excel y guardar el resultado en "Datos_Giova.xlsx"
+    replace_dots_with_commas_in_excel(input_file_path, output_file_path)
+
+    # Mostrar ventana informativa y abrir el archivo generado
+    show_information_window(output_file_path)
+
+    # Eliminar el archivo "datosCruzados.xlsx"
+    if os.path.exists(input_file_path):
+        os.remove(input_file_path)
