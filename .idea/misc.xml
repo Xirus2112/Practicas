@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="Black">
+    <option name="enabledOnReformat" value="true" />
+    <option name="enabledOnSave" value="true" />
+    <option name="pathToExecutable" value="C:\Users\carlos.alvarado\AppData\Local\anaconda3\Scripts\black.exe" />
+    <option name="sdkUUID" value="097dd31b-f751-49e0-bc67-ced9e0eb2dab" />
+  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="C:\Users\carlos.alvarado\AppData\Local\anaconda3" project-jdk-type="Python SDK" />
   <component name="PyCharmDSProjectLayout">
     <option name="id" value="JupyterRightHiddenStructureLayout" />
